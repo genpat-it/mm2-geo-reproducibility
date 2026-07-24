@@ -28,7 +28,7 @@ badread simulate --seed 77 --reference $D/sample_sv.fa --quantity 15x --length 1
    --identity 99.5,100,1 --junk_reads 0 --random_reads 0 --chimeras 0 > $D/sv.fq 2>/dev/null
 echo "   reads: $(($(wc -l < $D/sv.fq)/4))" | tee -a $R
 
-echo ">> [4] pure-alignment time, median of 3 (32t)" | tee -a $R
+echo ">> [4] alignment time (index build included), median of 3 (32t)" | tee -a $R
 for cfg in mm2 geo; do
   gf=0; [ "$cfg" = geo ] && gf=1; t=()
   for i in 1 2 3; do

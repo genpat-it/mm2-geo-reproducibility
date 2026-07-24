@@ -32,7 +32,7 @@ echo ">> [4] index ref + build SDF" | tee -a $R
 q "$SAMTOOLS" faidx chr22_named.fa
 conda activate "$CONDA_ENV_RTG"; rm -rf $D/sdf; rtg format -o $D/sdf chr22_named.fa >/dev/null 2>&1; conda deactivate
 
-echo ">> [5] pure-alignment time, median of 3 (32t)" | tee -a $R
+echo ">> [5] alignment time (index build included), median of 3 (32t)" | tee -a $R
 for cfg in mm2 geo; do
   gf=0; [ "$cfg" = geo ] && gf=1
   t=()

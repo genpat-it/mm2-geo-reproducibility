@@ -30,7 +30,7 @@ run(){ local tech=$1 preset=$2 reads=$3 mdl=$4 aln=$5 geo=$6   # aln: mm2|geo ; 
   $C3 --bam_fn=$W/b.bam --ref_fn=$CR --threads=32 --platform=$tech --model_path=$mdl \
       --output=$W/c3 --ctg_name=$CT --bed_fn=$BD >$W/c3.log 2>&1
   conda deactivate; conda activate "$CONDA_ENV_RTG"; rm -rf $W/ev
-  rtg vcfeval -b $TR -c $W/c3/merge_output.vcf.gz -t $SF -e $BD -o $W/ev >/dev/null 2>&1
+  rtg vcfeval -b $TR -c $W/c3/merge_output.vcf.gz -t $SF -e $BD -o $W/ev >/dev/null 2>&1 || { echo "    $tag: rtg vcfeval FAILED (see $W/c3.log)" | tee -a $R; conda deactivate; return; }
   conda deactivate
   echo "    eval retained: $W/ev (tp-baseline/fp/fn)" | tee -a $R
 }

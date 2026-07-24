@@ -23,7 +23,7 @@ f1(){ local tag=$1 G=$2
     --model_path=$MODEL --output=ecoli_vc/c3_$tag --include_all_ctgs --haploid_precise \
     --no_phasing_for_fa >ecoli_vc/c3_$tag.log 2>&1
   conda deactivate; conda activate "$CONDA_ENV_RTG"; rm -rf ecoli_vc/ev_$tag
-  rtg vcfeval -b $TR -c ecoli_vc/c3_$tag/merge_output.vcf.gz -t ecoli_vc/sdf -o ecoli_vc/ev_$tag --squash-ploidy >/dev/null 2>&1
+  rtg vcfeval -b $TR -c ecoli_vc/c3_$tag/merge_output.vcf.gz -t ecoli_vc/sdf -o ecoli_vc/ev_$tag --squash-ploidy >/dev/null 2>&1 || { echo "$tag: rtg vcfeval FAILED (see ecoli_vc/c3_$tag.log)" | tee -a $R; conda deactivate; return; }
   read ts ti < <(tc ecoli_vc/ev_$tag/tp.vcf.gz); read fps fpi < <(tc ecoli_vc/ev_$tag/fp.vcf.gz)
   read fns fni < <(tc ecoli_vc/ev_$tag/fn.vcf.gz); read tbs tbi < <(tc ecoli_vc/ev_$tag/tp-baseline.vcf.gz)
   conda deactivate

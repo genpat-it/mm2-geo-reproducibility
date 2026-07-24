@@ -1,6 +1,8 @@
 #!/bin/bash
-# Thread-scaling: absolute pure-alignment time vs threads, HiFi chr22, 100k-read subset.
-# single run at 1-2 threads (slow), median-of-3 at >=4 threads. PURE alignment.
+# Thread-scaling: alignment wall-clock vs threads, HiFi chr22, 100k-read subset. The reference
+# index is built on the fly from FASTA and included in the timed stage; it is identical for all
+# configs, so it cancels in the speedup ratios below.
+# single run at 1-2 threads (slow), median-of-3 at >=4 threads.
 set -uo pipefail
 source "$(dirname "$0")/config.sh"
 cd "$WORKDIR"
@@ -23,8 +25,9 @@ trun(){ local c; c="$(cmd "$1" "$2")"; local n=3; [ "$2" -le 2 ] && n=1; local t
   for i in $(seq 1 $n); do /usr/bin/time -f "%e" bash -c "$c >/dev/null 2>/dev/null" 2>$S/t.t; t+=("$(cat $S/t.t)"); done
   med "${t[@]}"; }
 
-echo "### THREAD SCALING — pure-align time (s), HiFi chr22 100k reads (single@1-2t, median-3@>=4t)" | tee -a $R
-printf "%-4s | %-9s %-9s %-9s %-9s | %-9s %-9s\n" "thr" "mm2" "geo" "fast" "fastgeo" "geo/mm2" "fg/mm2" | tee -a $R
+echo "### THREAD SCALING — alignment time (s, index build included), HiFi chr22 100k reads (single@1-2t, median-3@>=4t)" | tee -a $R
+# speedup columns are mm2_time / cfg_time (i.e. how many times faster than mm2); >1 means faster
+printf "%-4s | %-9s %-9s %-9s %-9s | %-9s %-9s\n" "thr" "mm2" "geo" "fast" "fastgeo" "mm2/geo" "mm2/fg" | tee -a $R
 for thr in 1 2 4 8 16 32 64; do
   a=$(trun mm2 $thr); b=$(trun geo $thr); c=$(trun fast $thr); d=$(trun fastgeo $thr)
   awk -v t=$thr -v a=$a -v b=$b -v c=$c -v d=$d 'BEGIN{
