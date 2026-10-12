@@ -1,5 +1,12 @@
 # mm2-geo — reproducibility (companion repository)
 
+> **Superseded.** This repository holds the material of the first submission (tag `submission-2026`)
+> and is no longer updated. The current reproducibility material, covering the revised manuscript
+> ("Geometry-guided band sizing for faster minimap2 gap filling, with a certified mode that reproduces
+> minimap2's output"), is on the `reproducibility` branch of the tool repository:
+> https://github.com/genpat-it/mm2-geo/tree/reproducibility (tag `reproducibility-revision-2026`;
+> the first-submission material is also there as tag `reproducibility-submission-2026`).
+
 This repository regenerates every table and figure of the mm2-geo paper. The **tool** itself
 (minimap2 v2.30 + the geometric patch, with the gated diagnostic flags) lives in a separate
 repository; this one holds the scripts, small data artifacts and raw outputs.
